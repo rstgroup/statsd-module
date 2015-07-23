@@ -7,11 +7,10 @@ php:
 
 matrix:
   allow_failures:
-    php:
-      - nightly
-      - hhvm
+    - php: 7
+    - php: hhvm
 
 install:
-  - composer install
+  - composer install --no-interaction
 
 script: phpunit
