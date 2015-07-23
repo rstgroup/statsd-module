@@ -19,46 +19,44 @@ Update your composer.json with following lines:
 In your ZF2 application config add to module list
 
 ```php
-return array(
-    ...
-    'modules' => array(
-        ....,
+return [
+    'modules' => [
         'RstGroup\\StatsdModule',
-        ....
-    ),
-    ...
-);
+    ],
+];
 ```
 
 also in your autoload config based on enviroment add statsd client configuration
 
 ```php
-     'statsd' => [
-            'tcp' => [
-                'host' => 'example_host',
-                'port' => example_port,
-                'timeout' => null,
-                'persistent' => false,
-                'mtu' => 1500,
-            ],
-            'udp' => [
-                'host' => 'example_host',
-                'port' => example_port,
-                'timeout' => null,
-                'persistent' => false,
-                'mtu' => 1500,
-            ],
-            'namespace' => 'services.default',
-            'connectionType' => 'RstGroup\Statsd\Connection\Blackhole'
-        ]
+return [
+    'statsd' => [
+        'tcp' => [
+            'host' => 'example_host',
+            'port' => example_port,
+            'timeout' => null,
+            'persistent' => false,
+            'mtu' => 1500,
+        ],
+        'udp' => [
+            'host' => 'example_host',
+            'port' => example_port,
+            'timeout' => null,
+            'persistent' => false,
+            'mtu' => 1500,
+        ],
+        'namespace' => 'services.default',
+        'connectionType' => 'RstGroup\Statsd\Connection\Blackhole',
+    ],
+];
 ```
 
 Connection types:
 
 * `RstGroup\Statsd\Connection\Udp`
-* `RstGroup\Statsd\Connection\Tcp`: errors will not be suppressed in this mode
-* `RstGroup\Statsd\Connection\Memory`: in this mode sending is disabled, but messages are collected
-* `RstGroup\Statsd\Connection\Blackhole`: in this mode sending is disabled
+* `RstGroup\Statsd\Connection\Tcp` errors will not be suppressed in this mode
+* `RstGroup\Statsd\Connection\Memory` in this mode sending is disabled, but messages are collected
+* `RstGroup\Statsd\Connection\Blackhole` in this mode sending is disabled
 
 
 
@@ -68,5 +66,5 @@ Connection types:
 Typical usage from ServiceManager
 
 ```php
-    $client = $serviceManager->get("RstGroup\Statsd\Client");
+$client = $serviceManager->get("RstGroup\Statsd\Client");
 ```
