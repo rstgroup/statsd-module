@@ -1,4 +1,4 @@
-# rstgroup/statsd-module
+# rstgroup/statsd-module [![Build Status](https://travis-ci.org/rstgroup/statsd-module.svg?branch=master)](https://travis-ci.org/rstgroup/statsd-module)
 
 Module is based on [domnikl/statsd-php](https://github.com/domnikl/statsd-php).
 
