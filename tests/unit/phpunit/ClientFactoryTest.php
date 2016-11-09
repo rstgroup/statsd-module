@@ -2,41 +2,40 @@
 
 namespace RstGroup\StatsdModule\Tests\Unit\PHPUnit\ClientFactory;
 
+use Domnikl\Statsd\Client;
+use Interop\Container\ContainerInterface;
 use RstGroup\StatsdModule\ClientFactory;
 
 class ClientFactoryTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * Testing proper building statsd client
      *
      * @dataProvider connectionProvider
+     * @param array $config
      */
-    public function testCreateClient(array $config)
+    public function testWillReturnProperStatsdClientInstance(array $config)
     {
         $factory = new ClientFactory();
 
-        $serviceLocatorMock = $this->getMockBuilder('Zend\ServiceManager\ServiceManager')
-                ->setMethods(array('get'))
-                ->disableOriginalConstructor()
-                ->getMock();
+        $containerMock = $this->getMock(ContainerInterface::class);
 
         $connectionMock = $this->getMockBuilder($config['realConnection'])
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
+        $serviceLocatorServices = [
+            'Config' => $config,
+            $config['statsd']['connectionType'] => $connectionMock,
+        ];
 
-        $serviceLocatorMock->expects($this->at(0))
-                ->method('get')
-                ->with($this->equalTo('Config'))
-                ->will($this->returnValue($config));
+        $containerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnCallback(function($name) use ($serviceLocatorServices) {
+                return $serviceLocatorServices[$name];
+            }));
 
-        $serviceLocatorMock->expects($this->at(1))
-                ->method('get')
-                ->with($this->equalTo($config['statsd']['connectionType']))
-                ->will($this->returnValue($connectionMock));
-
-        $this->assertInstanceOf('Domnikl\Statsd\Client', $factory->createService($serviceLocatorMock));
+        $this->assertInstanceOf(Client::class, $factory($containerMock));
     }
 
     public function connectionProvider()

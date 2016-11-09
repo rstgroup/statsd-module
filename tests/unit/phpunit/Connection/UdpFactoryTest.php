@@ -1,15 +1,17 @@
 <?php
+
 namespace RstGroup\StatsdModule\Tests\Unit\PHPUnit\UdpFactory;
 
+use Domnikl\Statsd\Connection\UdpSocket;
+use Interop\Container\ContainerInterface;
 use RstGroup\StatsdModule\Connection\UdpFactory;
 
 class UdpFactoryTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * Testing proper building udp connection
      */
-    public function testCreateUdpConnection()
+    public function testWillReturnProperlyConfiguredUdpConnectorForStatsdClient()
     {
         $config = [
             'statsd' => [
@@ -25,15 +27,15 @@ class UdpFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new UdpFactory();
 
-        $serviceLocatorMock = $this->getMock('Zend\ServiceManager\ServiceManager', array('get'));
+        $containerMock = $this->getMock(ContainerInterface::class);
 
-        $serviceLocatorMock->expects($this->once())
+        $containerMock->expects($this->once())
                            ->method('get')
                            ->with($this->equalTo('Config'))
                            ->will($this->returnValue($config));
 
-        $connection = $factory->createService($serviceLocatorMock);
-        $this->assertInstanceOf('Domnikl\Statsd\Connection\UdpSocket', $connection);
+        $connection = $factory($containerMock);
+        $this->assertInstanceOf(UdpSocket::class, $connection);
         $this->assertEquals($connection->getHost(), $config['statsd']['udp']['host']);
         $this->assertEquals($connection->getPort(), $config['statsd']['udp']['port']);
         $this->assertEquals($connection->getTimeout(), $config['statsd']['udp']['timeout']);

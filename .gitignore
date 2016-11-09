@@ -1,3 +1,4 @@
 vendor
 tests/results
 composer.lock
+.idea/

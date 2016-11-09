@@ -3,17 +3,16 @@
 namespace RstGroup\StatsdModule\Connection;
 
 use Domnikl\Statsd\Connection\UdpSocket;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
 /**
  * Factory that creates UDP connection type
  */
-class UdpFactory implements FactoryInterface
+class UdpFactory
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container)
     {
-        $config = $serviceLocator->get('Config')['statsd']['udp'];
+        $config = $container->get('Config')['statsd']['udp'];
 
         return new UdpSocket(
             $config['host'],

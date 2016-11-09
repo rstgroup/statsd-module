@@ -3,18 +3,17 @@
 namespace RstGroup\StatsdModule;
 
 use Domnikl\Statsd\Client;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
 /**
  * Factory that creates Statsd client
  */
-class ClientFactory implements FactoryInterface
+class ClientFactory
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container)
     {
-        $config = $serviceLocator->get('Config')['statsd'];
-        $connection = $serviceLocator->get($config['connectionType']);
+        $config = $container->get('Config')['statsd'];
+        $connection = $container->get($config['connectionType']);
 
         return new Client($connection, $config['namespace']);
     }

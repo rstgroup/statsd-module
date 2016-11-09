@@ -3,17 +3,16 @@
 namespace RstGroup\StatsdModule\Connection;
 
 use Domnikl\Statsd\Connection\TcpSocket;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
 /**
  * Factory that creates TCP connection type
  */
-class TcpFactory implements FactoryInterface
+class TcpFactory
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container)
     {
-        $config = $serviceLocator->get('Config')['statsd']['tcp'];
+        $config = $container->get('Config')['statsd']['tcp'];
 
         return new TcpSocket(
             $config['host'],
