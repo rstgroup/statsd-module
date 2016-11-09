@@ -1,6 +1,6 @@
 {
   "name": "rstgroup/statsd-module",
-  "description": "Statsd module for ZF2",
+  "description": "Statsd module for ZF2/ZF3",
   "type": "library",
   "authors": [
     {
@@ -10,13 +10,17 @@
     {
       "name": "Witold Wasiczko",
       "email": "witold.wasiczko@rst.com.pl"
+    },
+    {
+      "name": "Adrian Ziółkowski",
+      "email": "adrian.ziolkowski@rst.com.pl"
     }
   ],
   "require": {
     "php": ">=5.4.0",
     "domnikl/statsd": "~2.1",
     "zendframework/zend-modulemanager": "~2.2",
-    "zendframework/zend-servicemanager": "~2.2"
+    "zendframework/zend-servicemanager": "~2.2 || ^3"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.3"
