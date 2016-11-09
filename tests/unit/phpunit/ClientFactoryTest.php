@@ -28,13 +28,15 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $serviceLocatorServices = [
-            ['Config', $config],
-            [$config['statsd']['connectionType'], $connectionMock],
+            'Config' => $config,
+            $config['statsd']['connectionType'] => $connectionMock,
         ];
 
         $serviceLocatorMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValueMap($serviceLocatorServices));
+            ->will($this->returnCallback(function($name) use ($serviceLocatorServices) {
+                return $serviceLocatorServices[$name];
+            }));
 
         $this->assertInstanceOf(Client::class, $factory->createService($serviceLocatorMock));
     }
