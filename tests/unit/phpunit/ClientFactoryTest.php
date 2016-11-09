@@ -3,8 +3,8 @@
 namespace RstGroup\StatsdModule\Tests\Unit\PHPUnit\ClientFactory;
 
 use Domnikl\Statsd\Client;
+use Interop\Container\ContainerInterface;
 use RstGroup\StatsdModule\ClientFactory;
-use Zend\ServiceManager\ServiceManager;
 
 class ClientFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,10 +18,7 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new ClientFactory();
 
-        $serviceLocatorMock = $this->getMockBuilder(ServiceManager::class)
-            ->setMethods(array('get'))
-            ->disableOriginalConstructor()
-            ->getMock();
+        $containerMock = $this->getMock(ContainerInterface::class);
 
         $connectionMock = $this->getMockBuilder($config['realConnection'])
             ->disableOriginalConstructor()
@@ -32,13 +29,13 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase
             $config['statsd']['connectionType'] => $connectionMock,
         ];
 
-        $serviceLocatorMock->expects($this->any())
+        $containerMock->expects($this->any())
             ->method('get')
             ->will($this->returnCallback(function($name) use ($serviceLocatorServices) {
                 return $serviceLocatorServices[$name];
             }));
 
-        $this->assertInstanceOf(Client::class, $factory->createService($serviceLocatorMock));
+        $this->assertInstanceOf(Client::class, $factory($containerMock));
     }
 
     public function connectionProvider()

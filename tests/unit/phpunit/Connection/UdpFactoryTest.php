@@ -3,8 +3,8 @@
 namespace RstGroup\StatsdModule\Tests\Unit\PHPUnit\UdpFactory;
 
 use Domnikl\Statsd\Connection\UdpSocket;
+use Interop\Container\ContainerInterface;
 use RstGroup\StatsdModule\Connection\UdpFactory;
-use Zend\ServiceManager\ServiceManager;
 
 class UdpFactoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,14 +27,14 @@ class UdpFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new UdpFactory();
 
-        $serviceLocatorMock = $this->getMock(ServiceManager::class, array('get'));
+        $containerMock = $this->getMock(ContainerInterface::class);
 
-        $serviceLocatorMock->expects($this->once())
+        $containerMock->expects($this->once())
                            ->method('get')
                            ->with($this->equalTo('Config'))
                            ->will($this->returnValue($config));
 
-        $connection = $factory->createService($serviceLocatorMock);
+        $connection = $factory($containerMock);
         $this->assertInstanceOf(UdpSocket::class, $connection);
         $this->assertEquals($connection->getHost(), $config['statsd']['udp']['host']);
         $this->assertEquals($connection->getPort(), $config['statsd']['udp']['port']);
