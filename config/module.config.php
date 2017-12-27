@@ -3,13 +3,19 @@
 return [
     'service_manager' => [
         'factories' => [
-            'RstGroup\Statsd\Client' => 'RstGroup\StatsdModule\ClientFactory',
-            'RstGroup\Statsd\Connection\Udp' => 'RstGroup\StatsdModule\Connection\UdpFactory',
-            'RstGroup\Statsd\Connection\Tcp' => 'RstGroup\StatsdModule\Connection\TcpFactory',
+            \Domnikl\Statsd\Client::class => \RstGroup\StatsdModule\ClientFactory::class,
+            \Domnikl\Statsd\Connection\UdpSocket::class => \RstGroup\StatsdModule\Connection\UdpFactory::class,
+            \Domnikl\Statsd\Connection\TcpSocket::class => \RstGroup\StatsdModule\Connection\TcpFactory::class,
+            \Domnikl\Statsd\Connection\Blackhole::class => \Zend\ServiceManager\Factory\InvokableFactory::class,
+            \Domnikl\Statsd\Connection\InMemory::class => \Zend\ServiceManager\Factory\InvokableFactory::class,
         ],
-        'invokables' => [
-            'RstGroup\Statsd\Connection\Blackhole' => 'Domnikl\Statsd\Connection\Blackhole',
-            'RstGroup\Statsd\Connection\Memory' => 'Domnikl\Statsd\Connection\InMemory',
+        'aliases' => [
+            'statsd' => \Domnikl\Statsd\Client::class,
+            'RstGroup\Statsd\Client' => \Domnikl\Statsd\Client::class,
+            'RstGroup\Statsd\Connection\Udp' => \Domnikl\Statsd\Connection\UdpSocket::class,
+            'RstGroup\Statsd\Connection\Tcp' => \Domnikl\Statsd\Connection\TcpSocket::class,
+            'RstGroup\Statsd\Connection\Blackhole' => \Domnikl\Statsd\Connection\Blackhole::class,
+            'RstGroup\Statsd\Connection\Memory' => \Domnikl\Statsd\Connection\InMemory::class,
         ],
     ],
     // Statsd client module start configuration
@@ -29,6 +35,6 @@ return [
             'mtu' => 1500,
         ],
         'namespace' => 'services.default',
-        'connectionType' => 'RstGroup\Statsd\Connection\Blackhole', // service name from service manager
+        'connectionType' => \Domnikl\Statsd\Connection\Blackhole::class, // service name from container
     ],
 ];

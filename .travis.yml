@@ -1,37 +1,19 @@
 language: php
 
-matrix:
-  fast_finish: true
-  include:
-    - php: 5.5
-      env:
-        - DEPS=lowest
-    - php: 5.5
-      env:
-        - DEPS=latest
-    - php: 5.6
-      env:
-        - DEPS=lowest
-    - php: 5.6
-      env:
-        - DEPS=latest
-    - php: 7
-      env:
-        - DEPS=lowest
-    - php: 7
-      env:
-        - DEPS=latest
-    - php: hhvm
-      env:
-        - DEPS=lowest
-    - php: hhvm
-      env:
-        - DEPS=latest
+php:
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
 
-install:
-  - if [[ $DEPS == 'latest' ]]; then travis_retry composer update --no-interaction --prefer-source ; fi
-  - if [[ $DEPS == 'lowest' ]]; then travis_retry composer update --no-interaction --prefer-source --prefer-lowest ; fi
-  - composer info -i
+env:
+  - DEPS=lowest
+  - DEPS=latest
+
+before_script:
+  - phpenv config-rm xdebug.ini
+  - if [[ $DEPS == 'lowest' ]]; then composer update --prefer-stable --no-interaction --prefer-lowest ; fi
+  - if [[ $DEPS == 'latest' ]]; then composer update --prefer-stable --no-interaction ; fi
 
 script:
-- ./vendor/bin/phpunit
+  - ./vendor/bin/phpunit

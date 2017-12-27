@@ -5,18 +5,16 @@ Module is based on [domnikl/statsd-php](https://github.com/domnikl/statsd-php).
 
 ## Installation
 
-Update your composer.json with following lines:
+Using composer:
 
-```javascript
-"require": {
-    "rstgroup/statsd-module": "^1.0"
-}
+```
+composer require rstgroup/statsd-module
 ```
 
 
 ## Configuration
 
-In your ZF2 application config add to module list
+In your Zend Framework application config add to module list
 
 ```php
 return [
