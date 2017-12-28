@@ -4,9 +4,10 @@ namespace RstGroup\StatsdModule\Tests\Unit\PHPUnit\UdpFactory;
 
 use Domnikl\Statsd\Connection\UdpSocket;
 use Interop\Container\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 use RstGroup\StatsdModule\Connection\UdpFactory;
 
-class UdpFactoryTest extends \PHPUnit_Framework_TestCase
+class UdpFactoryTest extends TestCase
 {
     /**
      * Testing proper building udp connection
@@ -27,12 +28,12 @@ class UdpFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new UdpFactory();
 
-        $containerMock = $this->getMock(ContainerInterface::class);
+        $containerMock = $this->createMock(ContainerInterface::class);
 
-        $containerMock->expects($this->once())
-                           ->method('get')
-                           ->with($this->equalTo('Config'))
-                           ->will($this->returnValue($config));
+        $containerMock
+                ->method('get')
+                ->with($this->equalTo('Config'))
+                ->will($this->returnValue($config));
 
         $connection = $factory($containerMock);
         $this->assertInstanceOf(UdpSocket::class, $connection);
