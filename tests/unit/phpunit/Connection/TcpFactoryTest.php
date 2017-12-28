@@ -4,9 +4,10 @@ namespace RstGroup\StatsdModule\Tests\Unit\PHPUnit\TcpFactory;
 
 use Domnikl\Statsd\Connection\TcpSocket;
 use Interop\Container\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 use RstGroup\StatsdModule\Connection\TcpFactory;
 
-class TcpFactoryTest extends \PHPUnit_Framework_TestCase
+class TcpFactoryTest extends TestCase
 {
     /**
      * Testing proper building tcp connection
@@ -27,11 +28,10 @@ class TcpFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new TcpFactory();
 
-        $containerMock = $this->getMock(ContainerInterface::class);
-        $containerMock->expects($this->once())
-                           ->method('get')
-                           ->with($this->equalTo('Config'))
-                           ->will($this->returnValue($config));
+        $containerMock = $this->createMock(ContainerInterface::class);
+        $containerMock->method('get')
+                ->with($this->equalTo('Config'))
+                ->will($this->returnValue($config));
 
         $connection = $factory($containerMock);
         $this->assertInstanceOf(TcpSocket::class, $connection);

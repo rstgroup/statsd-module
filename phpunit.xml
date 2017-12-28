@@ -1,4 +1,4 @@
-<phpunit bootstrap="tests/unit/phpunit/bootstrap.php"
+<phpunit bootstrap="vendor/autoload.php"
          backupStaticAttributes="false"
          backupGlobals="false"
          colors="true"
@@ -10,12 +10,6 @@
             <directory>./tests/unit/phpunit</directory>
         </testsuite>
     </testsuites>
-
-    <logging>
-        <log type="junit" target="tests/results/unit/phpunit.xml" logIncompleteSkipped="false" charset="UTF-8"/>
-        <log type="coverage-clover" target="tests/results/unit/phpunit-clover.xml"/>
-        <log type="coverage-html" target="tests/results/unit/phpunit-clover" charset="UTF-8" yui="true" highlight="false" />
-    </logging>
 
     <filter>
         <blacklist>

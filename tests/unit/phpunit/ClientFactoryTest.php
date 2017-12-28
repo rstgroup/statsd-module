@@ -4,9 +4,10 @@ namespace RstGroup\StatsdModule\Tests\Unit\PHPUnit\ClientFactory;
 
 use Domnikl\Statsd\Client;
 use Interop\Container\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 use RstGroup\StatsdModule\ClientFactory;
 
-class ClientFactoryTest extends \PHPUnit_Framework_TestCase
+class ClientFactoryTest extends TestCase
 {
     /**
      * Testing proper building statsd client
@@ -18,7 +19,7 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new ClientFactory();
 
-        $containerMock = $this->getMock(ContainerInterface::class);
+        $containerMock = $this->createMock(ContainerInterface::class);
 
         $connectionMock = $this->getMockBuilder($config['realConnection'])
             ->disableOriginalConstructor()
@@ -29,7 +30,7 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase
             $config['statsd']['connectionType'] => $connectionMock,
         ];
 
-        $containerMock->expects($this->any())
+        $containerMock
             ->method('get')
             ->will($this->returnCallback(function($name) use ($serviceLocatorServices) {
                 return $serviceLocatorServices[$name];
@@ -47,7 +48,7 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase
                         'namespace' => 'services.default',
                         'connectionType' => 'RstGroup\Statsd\Connection\Blackhole',
                     ],
-                    'realConnection' => 'Domnikl\Statsd\Connection\Blackhole',
+                    'realConnection' => \Domnikl\Statsd\Connection\Blackhole::class,
                 ],
             ],
             [
@@ -56,7 +57,7 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase
                         'namespace' => 'services.default',
                         'connectionType' => 'RstGroup\Statsd\Connection\Tcp',
                     ],
-                    'realConnection' => 'Domnikl\Statsd\Connection\TcpSocket',
+                    'realConnection' => \Domnikl\Statsd\Connection\TcpSocket::class,
                 ],
             ],
             [
@@ -65,7 +66,7 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase
                         'namespace' => 'services.default',
                         'connectionType' => 'RstGroup\Statsd\Connection\Udp',
                     ],
-                    'realConnection' => 'Domnikl\Statsd\Connection\UdpSocket',
+                    'realConnection' => \Domnikl\Statsd\Connection\UdpSocket::class,
                 ],
             ],
             [
@@ -74,7 +75,7 @@ class ClientFactoryTest extends \PHPUnit_Framework_TestCase
                         'namespace' => 'services.default',
                         'connectionType' => 'RstGroup\Statsd\Connection\Memory',
                     ],
-                    'realConnection' => 'Domnikl\Statsd\Connection\InMemory',
+                    'realConnection' => \Domnikl\Statsd\Connection\InMemory::class,
                 ],
             ],
         ];
